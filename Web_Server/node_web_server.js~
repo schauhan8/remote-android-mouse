@@ -1,0 +1,113 @@
+/* HTTP, Filesystem and Websocket imports */
+var http = require("http"),
+	url = require("url"),
+	path = require("path"),
+	fs = require("fs"),
+	websocket = require("socket.io"),
+	dgram = require("dgram");
+
+var DEMO_PAGE_URL = "/home/aureliano/coding/Experiments/nodes/Web_Server/www/demo.html";
+
+/* HTTP server process */
+var server = http.createServer(function(req, res) {
+	serve_files(req, res);
+});
+
+function serve_files(req, res){
+	var filePath = "/home/aureliano/coding/Experiments/nodes/Web_Server" + req.url;
+	console.log("here");
+    if (filePath == "/home/aureliano/coding/Experiments/nodes/Web_Server/"){
+        filePath = DEMO_PAGE_URL;
+	}
+    var extname = path.extname(filePath);
+	var contentType = "text/html";
+	
+	switch(extname){
+		case ".js":
+			contentType = "text/javascript";
+			break;
+			
+		case ".css":
+			contentType = "text/css";
+			break;
+		
+		case ".jpg":
+		case ".gif":
+			contentType = "img";
+			break;
+	}
+	
+	fs.exists(filePath, function(exists){
+		console.log(exists);
+		if(exists){
+			fs.readFile(filePath, function(err, data){
+				res.writeHead(200, {'Content-Type' : contentType});
+				res.write(data);
+				res.end();
+			});
+		}
+	});
+}
+
+server.listen(7596);
+console.log("Server listening on 7596");
+var io = websocket.listen(server); /* Creating the websocket */
+var Page = {};
+//var socket_container = [];
+
+io.sockets.on("connection", function(socket){
+	console.log("Client has connected");
+	Page.socket = socket;
+	//socket = _socket;
+	//socket_container.push(_socket);
+	io.sockets.emit("message", socket.id + " has connected");
+    
+	socket.on("message", function(data) {
+    	if(data){
+			onMessage(socket, data);
+		}	
+    });
+	
+	socket.on("disconnect", function() {
+		onLogout(socket.id);
+    });
+
+    // setInterval(function(){
+    // 	sendPeriodicMessages(socket);
+    // }, 1000); 
+});
+
+var onMessage = function(socket, data){
+	/* Handle message */
+};
+
+var onLogout = function(socket){
+	/* Handle Logout */
+};
+
+var sendPeriodicMessages = function(socket){
+	socket.emit("message", Math.random());
+};
+
+/* ---------------- UDP Socket Code ---------------- */
+
+var udp_socket = dgram.createSocket("udp4");
+
+var android_ui_buffer = [];
+
+udp_socket.on("message", function(content, rinfo){
+	var _content = JSON.parse(content.toString());
+	//console.log(_content);
+	android_ui_buffer.push(_content);
+	send_ui_data_to_client();
+});
+
+var send_ui_data_to_client = function(){
+	if(android_ui_buffer.length > 0){
+		io.sockets.emit("message", android_ui_buffer);
+		android_ui_buffer = [];
+	}
+};
+
+udp_socket.bind(7330);
+

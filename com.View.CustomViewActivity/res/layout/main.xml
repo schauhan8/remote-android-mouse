@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hello" />
+    
+      <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Data Accelerometers" />
+
+    <TextView
+        android:id="@+id/sensorvalue"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Sensor Value" />
+
+    <TextView
+        android:id="@+id/xvalue"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="X Value" />
+
+    <TextView
+        android:id="@+id/yvalue"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Y Value" />
+
+    <TextView
+        android:id="@+id/zvalue"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Z Value" />
+
+    <TextView
+        android:id="@+id/xgvalue"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="X Value" />
+
+    <TextView
+        android:id="@+id/ygvalue"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Y Value" />
+
+    <TextView
+        android:id="@+id/zgvalue"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Z Value" />
+
+</LinearLayout>
